@@ -5,19 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Todo;
 use Illuminate\Http\Request;
 
-class TodoController extends Controller
+class TodoController extends parentController
 {
     // creating function for save data
     protected $task;
 
-    public function __construct(){
-        // creating object accourding to the model
-        $this->task=new Todo();
-    }
+    // public function __construct(){
+    //     // creating object accourding to the model
+    //     $this->task=new Todo();
+    // }
 
     public function index(){
         //This syntax is common in PHP for defining and accessing array elements.
-        $response['tasks']=$this->task->all();
+        // $response['tasks']=$this->task->all();
+        $response['tasks']=Todo::all();
 
          //dd($response);
         return view('pagers.todo.index')->with($response);
