@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BannerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TodoController;
@@ -28,6 +29,13 @@ Route::prefix('todo')->group(function(){
     Route::get('/{task_id}/done',[TodoController::class, "done"])->name('todo.done');
 });
 
+
+Route::prefix('banner')->group(function(){
+    Route::get('/',[BannerController::class,'index'])->name('banner');
+    Route::post('/store',[BannerController::class,"store"])->name('banner.store');
+    Route::get('/{banner_id}/delete',[BannerController::class,'delete'])->name('banner.delete');
+    Route::get('/{banner_id}/status',[BannerController::class,'status'])->name('banner.status');
+});
 
 
 // Route::middleware([
