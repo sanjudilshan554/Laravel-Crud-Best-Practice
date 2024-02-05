@@ -16,7 +16,7 @@
                         <input name="title" class="form-control form-control-lg" type="text" placeholder="aBanner Title" aria-label=".form-control-lg example">
                     </div>
                     <div class="mt-2 col-lg-8">
-                        <input name="image" class="form-control form-control-lg" type="file" placeholder="Enter banner image" aria-label=".form-control-lg example"
+                        <input name="image" class="form-control form-control-lg dropify" type="file" placeholder="Enter banner image" aria-label=".form-control-lg example"
                             accept="image/jpg, image/jpeg, image/png"
                             ref="fileInput">
                     </div>
@@ -75,4 +75,10 @@
         color: rgb(134, 175, 19);
     }
 </style>
+@endpush
+
+@push('js')
+    <script>
+        $('.dropify').dropify();
+    </script>
 @endpush
