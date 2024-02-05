@@ -34,6 +34,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Title</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Image</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -51,7 +52,9 @@
                             
                             @endif
                         </td>
-
+                        <td>
+                            <img src="{{ $banner->url }}" alt="Image Fail" width="80px" height="50px">
+                        </td>
                         <td>
                             <a href="{{ route('banner.delete',$banner->id) }}" class="btn btn-danger">Delete</a>
                             <a href="{{ route('banner.status',$banner->id) }}" class="btn btn-success">done</a>
