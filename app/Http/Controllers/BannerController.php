@@ -61,4 +61,5 @@ class BannerController extends Controller
         BannerFacade::status($banner_id);
         return redirect()->back();
     }
+
 }

@@ -7,7 +7,7 @@
             <h1 class="todo-text">home</h1>
         </div>
         <div class="col-lg-12">
-            <form action="{{ route('todo.store') }}" method="post" enctype="multipart/form">
+            <form action="{{ route('todo.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 {{-- without csrf the form won't be work because the all requests are not take from backend (for security purpose)--}}
                 <div class="row">
@@ -49,6 +49,7 @@
                         <td>
                             <a href="{{ route('todo.delete',$task->id) }}" class="btn btn-danger">Delete</a>
                             <a href="{{ route('todo.done',$task->id) }}" class="btn btn-success">done</a>
+                            <a href="javascript:void[0]" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TaskEdit" onclick="taskEditModel({{ $task->id }})">edit</a>
                         </td>
                       </tr>
                     @endforeach
@@ -56,6 +57,21 @@
               </table>
         </div>
     </div>
+
+<!-- Modal -->
+<div class="modal fade" id="TaskEdit" tabindex="-1" aria-labelledby="TaskEditLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="TaskEditLabel">Edit task</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="taskEditContent">
+            
+        </div>
+      </div>
+    </div>
+  </div>
 
 @endsection
 
@@ -66,4 +82,28 @@
         color: rgb(134, 175, 19);
     }
 </style>
+@endpush
+
+@push('js')
+    <script>
+        function taskEditModel(task_id){
+            console.log("taskEditModel function called with task_id: " + task_id);
+    var data = {
+        task_id: task_id,
+    };
+    $.ajax({
+        url: "{{route('todo.edit')}}",
+        headers:{
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: 'GET',
+        dataType: 'html',
+        data: data,
+        success:function (response){
+            $('#TaskEdit').modal('show');
+            $('#taskEditContent').html(response);
+        }
+    });
+}
+    </script>
 @endpush

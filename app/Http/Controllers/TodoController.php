@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Todo;
 use domain\Facades\TodoFacade;
 use Illuminate\Http\Request;
-
 class TodoController extends parentController
 {
     // creating function for save data
@@ -63,4 +62,24 @@ class TodoController extends parentController
 
         return redirect()->back();
     }
+
+    // public function edit(Request $request){
+    //     //  dd($request);
+    //     return view('pagers.todo.index')->with(TodoFacade::getup($request['task_id']));
+
+    // }
+
+    public function edit(Request $request){
+        // return $request; // only return is working dd is not working 
+        $task = TodoFacade::get($request->task_id);
+    
+        return view('pagers.todo.edit', compact('task'));
+    }
+
+
+    public function update(Request $request, $task_id){
+        TodoFacade::update($request->all(), $task_id);
+        return redirect()->back();
+    }
+
 }
