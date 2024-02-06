@@ -1,17 +1,19 @@
 <?php
     namespace domain\Services;
 
+    use App\Models\SubTask;
     use App\Models\Todo;
     use Illuminate\Http\Request;
     
     class TodoService{
 
     protected $task;
+    protected $subTask;
 
     public function __construct(){
 
         $this->task=new Todo();
-
+        $this->subTask=new SubTask();
     }
 
     public  function all(){
@@ -61,6 +63,19 @@
         protected function edit(Todo $task, $data){
             return array_merge($task->toArray(), $data);
         }
+
+        // sub task section 
+        public function store_sub($data){
+            $this->subTask->create($data);
+        }
+
+        public function getSubTask($task_id){
+           // return $this->subTask->where('task_id', $task_id)->get(); //this also working
+            return $this->subTask->getSubTask($task_id); //calling with method in subTask
+        }
+
+
+        
     }
 
     

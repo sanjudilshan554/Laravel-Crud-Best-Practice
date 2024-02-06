@@ -71,9 +71,12 @@ class TodoController extends parentController
 
     public function edit(Request $request){
         // return $request; // only return is working dd is not working 
-        $task = TodoFacade::get($request->task_id);
-    
-        return view('pagers.todo.edit', compact('task'));
+        //this one also correct
+        // $task = TodoFacade::get($request->task_id);
+        //return view('pagers.todo.edit', compact('task'));
+
+        $response['task']=TodoFacade::get($request['task_id']);        
+        return view('pagers.todo.edit')->with($response);
     }
 
 
@@ -82,4 +85,16 @@ class TodoController extends parentController
         return redirect()->back();
     }
 
+    public function sub($task_id){
+         $response['task']=TodoFacade::get($task_id);
+         $response['subTasks']=TodoFacade::getSubTask($task_id);
+         return view('pagers.todo.sub')->with($response);
+    }
+
+    public function store_sub(Request $request){
+        TodoFacade::store_sub($request->all());
+
+        return redirect()->back();
+    }
+    
 }
