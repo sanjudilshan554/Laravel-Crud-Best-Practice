@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Todo;
+use App\Models\User;
 use domain\Facades\TodoFacade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 class TodoController extends parentController
 {
     // creating function for save data
@@ -19,20 +23,84 @@ class TodoController extends parentController
         //This syntax is common in PHP for defining and accessing array elements.
         // $response['tasks']=$this->task->all();
 
-        // calling todo facades
-        $response['tasks']=TodoFacade::all();
+        $userInd=Auth::user();
+            // if( $userInd->hasRole('admin')){ //checking users by rows
+            //     // calling todo facades
+            //     $response['tasks']=TodoFacade::all();
+            //     return view('pagers.todo.index')->with($response);
+            // }else{
+            //     dd("doesn't have any permission to access this");
+            // }
+
+            if( $userInd->hasPermissionTo('view_todo')){ //checking users by rows
+                // calling todo facades
+                $response['tasks']=TodoFacade::all();
+                return view('pagers.todo.index')->with($response);
+            }else{
+                dd("doesn't have any permission to access this");
+            }
+        
+       
 
          //dd($response);
-        return view('pagers.todo.index')->with($response);
+        
     }
 
     public function store(Request $request){
         // dd($request);
+
         // $this->task->create($request->all());
 
-        TodoFacade::store($request->all());
+        $user=Auth::user();
 
-        return redirect()->back();
+        if($user->hasPermissionTo('create_todo')){
+            TodoFacade::store($request->all());;
+            return redirect()->back();
+        }else{
+            dd('sorry you cant access');
+        }
+
+        // To run user roles(Give the access with the model/role) and use auth in parent controller
+        // $role = Role::create(['name' => 'admin']);
+        // $role = Role::create(['name' => 'sub_admin']);
+        // $role = Role::create(['name' => 'user']);
+
+        // create permission
+        // $permission = Permission::create(['name' => 'view_todo']);
+        // $permission = Permission::create(['name' => 'create_todo']);
+        // $permission = Permission::create(['name' => 'update_todo']);
+        // $permission = Permission::create(['name' => 'delete_todo']);
+        // $permission = Permission::create(['name' => 'done_todo']);
+        // TodoFacade::store($request->all());
+
+        // assigning users
+        // $admin = User::find(1);
+        // $sub_admin=User::find(4);
+        // $user=User::find(3);
+        // $super_admin=User::find(5);
+        
+        // // assign roles to user
+        // $admin->assignRole('admin');
+        // $sub_admin->assignRole('sub_admin');
+        // $user->assignRole('user');
+
+        // Get roles
+        // $role_admin=role::where('name','admin')->first();
+        // $role_sub_admin=role::where('name','sub_admin')->first();
+        // $role_user=role::where('name','user')->first();
+
+        // $role_admin->givePermissionTo('view_todo');
+        // $role_admin->givePermissionTo('create_todo');
+        // $role_admin->givePermissionTo('update_todo');
+        // $role_admin->givePermissionTo('delete_todo');
+
+        // $role_sub_admin->givePermissionTo('view_todo');
+        // $role_sub_admin->givePermissionTo('create_todo');
+        // $role_sub_admin->givePermissionTo('update_todo');
+
+        // $role_user->givePermissionTo('view_todo');
+
+       
 
         // return redirect()->route('todo.store');
 
@@ -43,13 +111,19 @@ class TodoController extends parentController
 
     public function delete($task_id){
 
-        TodoFacade::delete($task_id);
+        $user=Auth::user();
+        if($user->hasPermissionTo('delete_todo')){
+            TodoFacade::delete($task_id);
+            return  redirect()->back();
+        }else{
+            dd('not access');
+        }
 
         // $task = $this->task->find($task_id);
         // $task->delete();
         // dd($task_id);
 
-        return  redirect()->back();
+        
     }
 
     public function done($task_id){
@@ -75,14 +149,22 @@ class TodoController extends parentController
         // $task = TodoFacade::get($request->task_id);
         //return view('pagers.todo.edit', compact('task'));
 
+        
         $response['task']=TodoFacade::get($request['task_id']);        
         return view('pagers.todo.edit')->with($response);
+       
+        
     }
 
 
     public function update(Request $request, $task_id){
-        TodoFacade::update($request->all(), $task_id);
-        return redirect()->back();
+
+        $user=Auth::user();
+        if($user->hasPermissionTo('update_todo')){
+            TodoFacade::update($request->all(), $task_id);
+            return redirect()->back();}else{
+                dd("not access");
+            }
     }
 
     public function sub($task_id){

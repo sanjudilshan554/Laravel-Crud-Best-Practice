@@ -6,6 +6,8 @@
         <div class="text-center">
             <h1 class="todo-text">home</h1>
         </div>
+        @hasrole('admin')
+        
         <div class="col-lg-12">
             <form action="{{ route('todo.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
@@ -20,7 +22,7 @@
                 </div>
             </form>
         </div>    
-        
+        @endhasrole
         <div class="">
             <table class="table">
                 <thead>
@@ -49,7 +51,9 @@
                         <td>
                             <a href="{{ route('todo.delete',$task->id) }}" class="btn btn-danger">Delete</a>
                             <a href="{{ route('todo.done',$task->id) }}" class="btn btn-success">done</a>
+                            @can('update_todo')
                             <a href="javascript:void[0]" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TaskEdit" onclick="taskEditModel({{ $task->id }})">edit</a>
+                            @endcan
                             <a href="{{ route('todo.sub',$task->id) }}" class="btn btn-dark">done</a>
                         </td>
                       </tr>
@@ -60,6 +64,7 @@
     </div>
 
 <!-- Modal -->
+
 <div class="modal fade" id="TaskEdit" tabindex="-1" aria-labelledby="TaskEditLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

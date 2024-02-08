@@ -7,6 +7,6 @@ use Illuminate\Http\Request;
 class parentController extends Controller
 {
     public function __construct(){
-        $this->middleware(['auth:sanctum','verified']);
+        $this->middleware(['auth']);
     }
 }
