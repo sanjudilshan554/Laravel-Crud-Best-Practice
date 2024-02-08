@@ -22,6 +22,8 @@ use App\Http\Controllers\TodoController;
 
 Route::get('/',[HomeController::class, "index"])->name('home');
 
+Route::get('/relation',[HomeController::class, "relate"])->name('relationship');
+
 Route::prefix('todo')->group(function(){
     Route::get('/',[TodoController::class, "index"])->name("todo");
     Route::post('/store',[TodoController::class,"store"])->name('todo.store');

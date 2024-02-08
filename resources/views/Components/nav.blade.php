@@ -12,6 +12,9 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{ route('banner') }}">Banners</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{ route('relationship') }}">Relations</a>
+          </li>       
         </ul>
         <!-- Authentication -->
         @if(Auth::user()){
